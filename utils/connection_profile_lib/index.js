@@ -17,7 +17,7 @@ module.exports = function (config_filename, logger) {
 	var misc = require('../misc.js')(logger);
 
 	if (!config_filename) {
-		config_filename = 'marbles_tls.json';										// default config file name
+		config_filename = 'customers_tls.json';										// default config file name
 	}
 	cp.config_path = path.join(__dirname, '../../config/' + config_filename);
 	cp.config = require(cp.config_path);											// load the config file
@@ -86,7 +86,7 @@ module.exports = function (config_filename, logger) {
 				return channels[0];
 			}
 		}
-		throw Error('No channels found in connection profile... this is problematic. A channel needs to be created before marbles can execute.');
+		throw Error('No channels found in connection profile... this is problematic. A channel needs to be created before customers can execute.');
 	};
 
 	// get the very first channel name from creds
@@ -117,17 +117,17 @@ module.exports = function (config_filename, logger) {
 		return null;													//can be null if network is not using TLS
 	};
 
-	// safely retrieve marbles config file fields
-	cp.getMarblesField = function (marbles_field) {
+	// safely retrieve customer config file fields
+	cp.getCustomersField = function (customers_field) {
 		try {
-			if (cp.config[marbles_field]) {
-				return cp.config[marbles_field];
+			if (cp.config[customers_field]) {
+				return cp.config[customers_field];
 			} else {
-				logger.warn('"' + marbles_field + '" not found in config json: ' + cp.config_path);
+				logger.warn('"' + customers_field + '" not found in config json: ' + cp.config_path);
 				return null;
 			}
 		} catch (e) {
-			logger.warn('"' + marbles_field + '" not found in config json: ' + cp.config_path);
+			logger.warn('"' + customers_field + '" not found in config json: ' + cp.config_path);
 			return null;
 		}
 	};
@@ -170,11 +170,11 @@ module.exports = function (config_filename, logger) {
 		const channel = cp.getChannelId();
 		const org = cp.getClientOrg();
 		const first_peer = cp.getFirstPeerName(channel);
-		return misc.saferString('marbles-' + net_name + channel + org + first_peer);
+		return misc.saferString('customers-' + net_name + channel + org + first_peer);
 	};
 
-	// build the marbles lib module options
-	cp.makeMarblesLibOptions = function () {
+	// build the customers lib module options
+	cp.makeCustomersLibOptions = function () {
 		const channel = cp.getChannelId();
 		const org_2_use = cp.getClientOrg();
 		const first_ca = cp.getFirstCaName(org_2_use);
