@@ -182,7 +182,7 @@ Etapa 6. Neste momento, o SDK está totalmente configurado e pronto para interag
 
 # Detalhes do Marbles
 
-Tomara que você tenha conseguido trocar uma ou duas bolas de gude entre os usuários. Para ver como ocorre uma transferência de bola de gude, vamos começar no chaincode. __/chaincode/marbles.go__
+Tomara que você tenha conseguido trocar uma ou duas bolas de gude entre os usuários. Para ver como ocorre uma transferência de bola de gude, vamos começar no chaincode. __/chaincode/customer.go__
 ```go
 type Marble struct { ObjectType string `json:"docType"` Id string `json:"id"` Color string `json:"color"` Size int `json:"size"` Owner OwnerRelation `json:"owner"` }
 ```
