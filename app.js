@@ -26,7 +26,7 @@ var winston = require('winston');								// logger module
 
 // ------------- Init our libraries ------------- //
 var wss = {};
-var marbles_lib = null;
+var customers_lib = null;
 var logger = new (winston.Logger)({
 	level: 'debug',
 	transports: [
@@ -37,8 +37,8 @@ var misc = require('./utils/misc.js')(logger);												// mis.js has generic 
 misc.check_creds_for_valid_json();
 var cp = require(__dirname + '/utils/connection_profile_lib/index.js')(process.env.creds_filename, logger);	// parses our cp file/data
 var host = 'localhost';
-var port = cp.getMarblesPort();
-process.env.marble_company = cp.getClientsOrgName();
+var port = cp.getCustomersPort();
+process.env.customer_company = cp.getClientsOrgName();
 
 // fabric client wrangler wraps the SDK
 var fcw = require('./utils/fc_wrangler/index.js')({ block_delay: cp.getBlockDelay() }, logger);
@@ -47,7 +47,7 @@ var fcw = require('./utils/fc_wrangler/index.js')({ block_delay: cp.getBlockDela
 var ws_server = require('./utils/websocket_server_side.js')(cp, fcw, logger);
 
 // setup/startup logic
-var startup_lib = require('./utils/startup_lib.js')(logger, cp, fcw, marbles_lib, ws_server);
+var startup_lib = require('./utils/startup_lib.js')(logger, cp, fcw, customers_lib, ws_server);
 
 // ------------- IBM Cloud Host Detection ------------- //
 if (process.env.VCAP_APPLICATION) {
@@ -61,7 +61,7 @@ app.set('view engine', 'pug');
 app.use(compression());
 app.use(cookieParser());
 app.use(serve_static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'lostmymarbles', resave: true, saveUninitialized: true }));
+app.use(session({ secret: 'lostmycustomer', resave: true, saveUninitialized: true }));
 app.options('*', cors());
 app.use(cors());
 
@@ -108,7 +108,7 @@ process.on('uncaughtException', function (err) {
 		logger.warn('----------------------------- Ah! -----------------------------');
 		logger.warn('---------------------------------------------------------------');
 		logger.error('You already have something running on port ' + port + '!');
-		logger.error('Kill whatever is running on that port OR change the port setting in your marbles config file: ' + cp.config_path);
+		logger.error('Kill whatever is running on that port OR change the port setting in your customers config file: ' + cp.config_path);
 		process.exit();
 	}
 	if (wss && wss.broadcast) {							// if possible send the error out to the client
@@ -159,17 +159,17 @@ if (config_error) {
 			ws_server.record_state('enrolling', 'success');
 			ws_server.broadcast_state();
 
-			// --- [2] Setup Marbles Library --- //
-			startup_lib.setup_marbles_lib(host, port, function () {
+			// --- [2] Setup Customers Library --- //
+			startup_lib.setup_customers_lib(host, port, function () {
 
-				// --- [3] Check If We have Started Marbles Before --- //
+				// --- [3] Check If We have Started Customers Before --- //
 				startup_lib.detect_prev_startup({ startup: true }, function (err) {
 					if (err) {
 						startup_lib.startup_unsuccessful(host, port);
 					} else {
 						console.log('\n\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 						logger.debug('Detected that we have launched successfully before');
-						logger.debug('Welcome back - Marbles is ready');
+						logger.debug('Welcome back - Customers is ready');
 						logger.debug('Open your browser to http://' + host + ':' + port + ' and login as "admin"');
 						console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n');
 					}
@@ -207,7 +207,7 @@ function setupWebSocket() {
 				logger.debug('[ws] setup message', data);
 				startup_lib.setup_ws_steps(data);					// <-- open startup_lib.js to view the rest of the start up code
 
-			} else if (data) {										// its a normal marble request, pass it to the lib for processing
+			} else if (data) {										// its a normal customers request, pass it to the lib for processing
 				ws_server.process_msg(ws, data);					// <-- the interesting "blockchainy" code is this way (websocket_server_side.js)
 			}
 		});

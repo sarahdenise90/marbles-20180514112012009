@@ -27,7 +27,7 @@ If you are using the files you will likely need to edit them from their default 
     "cred_filename": "connection_profile_tls.json",
     "use_events": true,
     "keep_alive_secs": 120,
-    "company": "United Marbles",
+    "company": "United Customers",
     "usernames": [
         "amy",
         "alice",
@@ -87,7 +87,7 @@ You should have already downloaded this file from the service during the [instal
 				}
 			},
 			"chaincodes": [
-				"marbles:v4"
+				"customers:v4"
 			],
 			"x-blockDelay": 10000
 		}

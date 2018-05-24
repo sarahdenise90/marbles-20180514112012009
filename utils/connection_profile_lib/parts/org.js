@@ -40,7 +40,7 @@ module.exports = function (cp, logger) {
 	};
 
 	// get the marble usernames from the cp or config file
-	helper.getMarbleUsernames = function () {
+	helper.getCustomerUsernames = function () {
 		if (cp.using_env) {
 			let org = cp.getClientOrg();
 			if (org) org = org.toLowerCase();
@@ -65,7 +65,7 @@ module.exports = function (cp, logger) {
 			}
 		}
 
-		return cp.getMarbleUsernamesConfig();		// fallback use config file
+		return cp.getCustomerUsernamesConfig();		// fallback use config file
 	};
 
 	// get this org's msp id

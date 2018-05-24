@@ -18,7 +18,7 @@ module.exports = function (cp, logger) {
 			logger.warn('---------------------------------------------------------------');
 			logger.warn('----------------------------- Ah! -----------------------------');
 			logger.warn('---------------------------------------------------------------');
-			logger.error('Looks like you are using an old version of marbles chaincode...');
+			logger.error('Looks like you are using an old version of customers chaincode...');
 			logger.warn('The INTERNAL version of the chaincode found is: v' + v.parsed);
 			logger.warn('But this UI is expecting INTERNAL chaincode version: v' + version[0] + '.x.x');
 			logger.warn('This mismatch won\'t work =(');
@@ -42,7 +42,7 @@ module.exports = function (cp, logger) {
 		} else {
 			let org_2_use, first_ca, first_orderer, first_peer;
 			try {
-				console.log('Welcome aboard:\t', process.env.marble_company);
+				console.log('Welcome aboard:\t', process.env.customer_company);
 				console.log('Channel:\t', channel);
 				org_2_use = cp.getClientOrg();
 				console.log('Org:\t\t', org_2_use);

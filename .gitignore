@@ -13,8 +13,8 @@ chaincode.exe
 app_state*
 /utils/fc_wrangler/kvs
 /config/connection_profile_dev.json
-/config/marbles_dev.json
+/config/customers_dev.json
 /config/crypto/hsbn
 /config/connection_profile_dev2.json
-/config/marbles_dev2.json
+/config/customerss_dev2.json
 /config/temp.json

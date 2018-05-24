@@ -39,31 +39,31 @@ gulp.task('watch-server', function () {
 
 // ---------------- Runnable Gulp Tasks ---------------- //
 gulp.task('default', ['watch-sass', 'watch-server', 'server']);
-gulp.task('marbles_tls', ['env_tls', 'watch-sass', 'watch-server', 'server']);		//run with command `gulp marbles_tls` for IBM Cloud blockchain service
-gulp.task('marbles_local', ['env_local', 'watch-sass', 'watch-server', 'server']);	//run with command `gulp marbles_local` for a local network
-gulp.task('marbles_cs', ['env_cs', 'watch-sass', 'watch-server', 'server']);		//run with command `gulp marbles_cs` for IBM Cloud container service
-gulp.task('marbles_dev', ['env_dev', 'watch-sass', 'watch-server', 'server']);		//run with command `gulp marbles_dev` if you are me
-gulp.task('marbles_dev2', ['env_dev2', 'watch-sass', 'watch-server', 'server']);	//run with command `gulp marbles_dev` if you are me
+gulp.task('customers_tls', ['env_tls', 'watch-sass', 'watch-server', 'server']);		//run with command `gulp marbles_tls` for IBM Cloud blockchain service
+gulp.task('customers_local', ['env_local', 'watch-sass', 'watch-server', 'server']);	//run with command `gulp marbles_local` for a local network
+gulp.task('customers_cs', ['env_cs', 'watch-sass', 'watch-server', 'server']);		//run with command `gulp marbles_cs` for IBM Cloud container service
+gulp.task('customers_dev', ['env_dev', 'watch-sass', 'watch-server', 'server']);		//run with command `gulp marbles_dev` if you are me
+gulp.task('customers_dev2', ['env_dev2', 'watch-sass', 'watch-server', 'server']);	//run with command `gulp marbles_dev` if you are me
 gulp.task('build', ['watch-sass']);
 
 // IBM Cloud Blockchain Service
 gulp.task('env_tls', function () {
-	env['creds_filename'] = 'marbles_tls.json';
+	env['creds_filename'] = 'customers_tls.json';
 });
 
 // Local Fabric via Docker Compose
 gulp.task('env_local', function () {
-	env['creds_filename'] = 'marbles_local.json';
+	env['creds_filename'] = 'customers_local.json';
 });
 
 // IBM Cloud Container Service
 gulp.task('env_cs', function () {
-	env['creds_filename'] = 'marbles_cs.json';
+	env['creds_filename'] = 'customers_cs.json';
 });
 
 // Dev
 gulp.task('env_dev', function () {
-	env['creds_filename'] = 'marbles_dev.json';
+	env['creds_filename'] = 'customers_dev.json';
 	/*
 	env.CHAINCODE_ID = 'marbles-v8';
 	env.CHAINCODE_VERSION = '1521498413';
@@ -75,5 +75,5 @@ gulp.task('env_dev', function () {
 
 // Dev 2
 gulp.task('env_dev2', function () {
-	env['creds_filename'] = 'marbles_dev2.json';
+	env['creds_filename'] = 'customers_dev2.json';
 });

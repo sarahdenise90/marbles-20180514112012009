@@ -10,7 +10,7 @@ module.exports = function (logger) {
 	misc.check_creds_for_valid_json = function (cb) {
 		if (!detect_env.getConnectionProfileFromEnv()) {
 			if (!process.env.creds_filename) {
-				process.env.creds_filename = 'marbles_tls.json';				//default to a file
+				process.env.creds_filename = 'customers_tls.json';				//default to a file
 			}
 
 			var config_path = path.join(__dirname, '../config/' + process.env.creds_filename);

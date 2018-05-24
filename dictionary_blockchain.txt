@@ -55,7 +55,7 @@ truthy
 webapp
 vcap
 resave
-lostmymarbles
+lostmycustomer
 selftest
 ownerindex
 abcdefghijkmnpqrstuvwxyz

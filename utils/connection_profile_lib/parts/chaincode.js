@@ -24,7 +24,7 @@ module.exports = function (cp, logger) {
 					return chaincode[0];												// first one
 				}
 			}
-			logger.warn('No chaincode ID found in connection profile... might be okay if we haven\'t instantiated marbles yet');
+			logger.warn('No chaincode ID found in connection profile... might be okay if we haven\'t instantiated customers yet');
 			return null;
 		}
 	};
@@ -49,7 +49,7 @@ module.exports = function (cp, logger) {
 					return cp.creds.channels[channel].chaincodes[chaincodeId];			// config version 1.0.0 and 1.0.1 way
 				}
 			}
-			logger.warn('No chaincode version found in connection profile... might be okay if we haven\'t instantiated marbles yet');
+			logger.warn('No chaincode version found in connection profile... might be okay if we haven\'t instantiated customers yet');
 			return null;
 		}
 	};

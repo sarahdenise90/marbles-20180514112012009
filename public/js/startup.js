@@ -17,7 +17,7 @@ $(document).on('ready', function () {
 		instantSetup = true;
 		$('#instantSetup, #startSteps').prop('disabled', true);
 		$('#stepWelcomeWrap .loadingdiv').show();
-		build_marble_owners();
+		build_customer_owners();
 	});
 
 	$('#showStartupPanel').click(function () {
@@ -54,9 +54,9 @@ $(document).on('ready', function () {
 		ws.send(JSON.stringify(obj));
 	});
 
-	//register new marble owners
+	//register new customer owners
 	$('#registerOwners').click(function () {
-		build_marble_owners();
+		build_customer_owners();
 		$(this).prev('button').html('Next Step');
 	});
 
@@ -112,14 +112,14 @@ $(document).on('ready', function () {
 // Start Up Fun
 // ================================================================================
 
-// build the marble owners
-function build_marble_owners() {
-	var owners = $('input[name="marbleOwners"]').val();
+// build the customer owners
+function build_customer_owners() {
+	var owners = $('input[name="customerOwners"]').val();
 	owners = owners.split(',');
 	var obj = {
 		type: 'setup',
 		configure: 'register',
-		build_marble_owners: owners,
+		build_customer_owners: owners,
 	};
 	console.log('[startup] sending register msg');
 	ws.send(JSON.stringify(obj));
