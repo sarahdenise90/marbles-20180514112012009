@@ -1,7 +1,7 @@
 ---
 applications:
 - disk_quota: 1024M
-  name: marbles
+  name: customer
   command: "node app.js"
   path: "."
   instances: 1

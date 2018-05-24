@@ -16,7 +16,7 @@
 			],
 			"peers": {},
 			"chaincodes": [
-				"marbles:v4"
+				"customers:v4"
 			],
 			"x-blockDelay": 1000
 		}

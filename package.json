@@ -1,5 +1,5 @@
 {
-	"name": "marbles",
+	"name": "customers",
 	"version": "4.0.0",
 	"description": "A demonstration Node.js web application on Hyperledger Fabric.",
 	"main": "app.js",
