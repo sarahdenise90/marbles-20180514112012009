@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t marbles:local -f Dockerfile ../
+docker build -t customers:local -f Dockerfile ../

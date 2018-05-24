@@ -12,8 +12,8 @@ var logger = new (winston.Logger)({
 });
 
 // --- Set Details Here --- //
-var config_file = 'marbles_local.json';							//set config file name
-var chaincode_id = 'marbles';									//set desired chaincode id to identify this chaincode
+var config_file = 'customers_local.json';							//set config file name
+var chaincode_id = 'customers';									//set desired chaincode id to identify this chaincode
 var chaincode_ver = 'v4';										//set desired chaincode version
 
 //  --- Use (optional) arguments if passed in --- //
@@ -51,7 +51,7 @@ fcw.enrollWithAdminCert(cp.makeEnrollmentOptionsUsingCert(), function (enrollErr
 		const first_peer = cp.getFirstPeerName(channel);
 		var opts = {
 			peer_urls: [cp.getPeersUrl(first_peer)],
-			path_2_chaincode: 'marbles',				//path to chaincode from <marbles root>/chaincode/src/
+			path_2_chaincode: 'customers',				//path to chaincode from <customers root>/chaincode/src/
 			chaincode_id: chaincode_id,
 			chaincode_version: chaincode_ver,
 			peer_tls_opts: cp.getPeerTlsCertOpts(first_peer)

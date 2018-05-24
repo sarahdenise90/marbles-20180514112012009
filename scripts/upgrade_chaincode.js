@@ -8,8 +8,8 @@ var logger = new (winston.Logger)({
 });
 
 // --- Set Details Here --- //
-var config_file = 'marbles_local.json';							//set config file name
-var chaincode_id = 'marbles01';									//use same ID during the PREVIOUS instantiate proposal
+var config_file = 'customers_local.json';							//set config file name
+var chaincode_id = 'customers01';									//use same ID during the PREVIOUS instantiate proposal
 var chaincode_ver = 'v5';										//use same version during the INSTALL proposal
 
 //  --- Use (optional) arguments if passed in --- //

@@ -24,7 +24,7 @@ module.exports = function (logger, cp) {
 	// Login
 	// ============================================================================================================================
 	app.get('/login', function (req, res) {
-		res.render('login', { title: 'Marbles - Login', bag: build_bag(req) });
+		res.render('login', { title: 'Customers - Login', bag: build_bag(req) });
 	});
 
 	app.post('/login', function (req, res) {
@@ -53,7 +53,7 @@ module.exports = function (logger, cp) {
 		//if (!req.session.user || !req.session.user.username) {		// no session? send them to login
 		//	res.redirect('/login');
 		//} else {
-		res.render('marbles', { title: 'Marbles - Home', bag: build_bag(req) });
+		res.render('customers', { title: 'Customers - Home', bag: build_bag(req) });
 		//}
 	}
 
@@ -65,7 +65,7 @@ module.exports = function (logger, cp) {
 			cp_filename: cp.config.cred_filename,
 			jshash: cachebust_js,						//js cache busting hash (not important)
 			csshash: cachebust_css,						//css cache busting hash (not important)
-			marble_company: process.env.marble_company,
+			customer_company: process.env.customer_company,
 			creds: get_credential_data(),
 			using_env: cp.using_env,
 		};
@@ -87,7 +87,7 @@ module.exports = function (logger, cp) {
 			chaincode_id: cp.getChaincodeId(),
 			channel: cp.getChannelId(),
 			chaincode_version: cp.getChaincodeVersion(),
-			marble_owners: cp.getMarbleUsernames(),
+			customer_owners: cp.getCustomerUsernames(),
 		};
 		for (var i in ret) {
 			if (ret[i] == null) ret[i] = '';			//set to blank if not found
