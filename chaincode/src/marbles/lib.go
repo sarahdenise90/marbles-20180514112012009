@@ -28,21 +28,21 @@ import (
 )
 
 // ============================================================================================================================
-// Get Marble - get a marble asset from ledger
+// Get Customer - get a customer asset from ledger
 // ============================================================================================================================
-func get_marble(stub shim.ChaincodeStubInterface, id string) (Marble, error) {
-	var marble Marble
-	marbleAsBytes, err := stub.GetState(id)                  //getState retreives a key/value from the ledger
-	if err != nil {                                          //this seems to always succeed, even if key didn't exist
-		return marble, errors.New("Failed to find marble - " + id)
+func get_customer(stub shim.ChaincodeStubInterface, id string) (Customer, error) {
+	var customer Customer
+	customerAsBytes, err := stub.GetState(id) //getState retreives a key/value from the ledger
+	if err != nil {                           //this seems to always succeed, even if key didn't exist
+		return customer, errors.New("Failed to find customer - " + id)
 	}
-	json.Unmarshal(marbleAsBytes, &marble)                   //un stringify it aka JSON.parse()
+	json.Unmarshal(customerAsBytes, &customer) //un stringify it aka JSON.parse()
 
-	if marble.Id != id {                                     //test if marble is actually here or just nil
-		return marble, errors.New("Marble does not exist - " + id)
+	if customer.Id != id { //test if customer is actually here or just nil
+		return customer, errors.New("Customer does not exist - " + id)
 	}
 
-	return marble, nil
+	return customer, nil
 }
 
 // ============================================================================================================================
@@ -50,24 +50,24 @@ func get_marble(stub shim.ChaincodeStubInterface, id string) (Marble, error) {
 // ============================================================================================================================
 func get_owner(stub shim.ChaincodeStubInterface, id string) (Owner, error) {
 	var owner Owner
-	ownerAsBytes, err := stub.GetState(id)                     //getState retreives a key/value from the ledger
-	if err != nil {                                            //this seems to always succeed, even if key didn't exist
+	ownerAsBytes, err := stub.GetState(id) //getState retreives a key/value from the ledger
+	if err != nil {                        //this seems to always succeed, even if key didn't exist
 		return owner, errors.New("Failed to get owner - " + id)
 	}
-	json.Unmarshal(ownerAsBytes, &owner)                       //un stringify it aka JSON.parse()
+	json.Unmarshal(ownerAsBytes, &owner) //un stringify it aka JSON.parse()
 
-	if len(owner.Username) == 0 {                              //test if owner is actually here or just nil
+	if len(owner.Username) == 0 { //test if owner is actually here or just nil
 		return owner, errors.New("Owner does not exist - " + id + ", '" + owner.Username + "' '" + owner.Company + "'")
 	}
-	
+
 	return owner, nil
 }
 
 // ========================================================
 // Input Sanitation - dumb input checking, look for empty strings
 // ========================================================
-func sanitize_arguments(strs []string) error{
-	for i, val:= range strs {
+func sanitize_arguments(strs []string) error {
+	for i, val := range strs {
 		if len(val) <= 0 {
 			return errors.New("Argument " + strconv.Itoa(i) + " must be a non-empty string")
 		}

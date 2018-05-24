@@ -31,7 +31,7 @@ import (
 
 // ============================================================================================================================
 // write() - genric write variable into ledger
-// 
+//
 // Shows Off PutState() - writting a key/value into the ledger
 //
 // Inputs - Array of strings
@@ -54,9 +54,9 @@ func write(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(err.Error())
 	}
 
-	key = args[0]                                   //rename for funsies
+	key = args[0] //rename for funsies
 	value = args[1]
-	err = stub.PutState(key, []byte(value))         //write the variable into the ledger
+	err = stub.PutState(key, []byte(value)) //write the variable into the ledger
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -67,7 +67,7 @@ func write(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 // ============================================================================================================================
 // delete_marble() - remove a marble from state and from marble index
-// 
+//
 // Shows Off DelState() - "removing"" a key/value from the ledger
 //
 // Inputs - Array of strings
@@ -75,8 +75,8 @@ func write(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 //     id      ,  authed_by_company
 // "m999999999", "united marbles"
 // ============================================================================================================================
-func delete_marble(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
-	fmt.Println("starting delete_marble")
+func delete_customer(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Println("starting delete_customer")
 
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
@@ -91,25 +91,25 @@ func delete_marble(stub shim.ChaincodeStubInterface, args []string) (pb.Response
 	id := args[0]
 	authed_by_company := args[1]
 
-	// get the marble
-	marble, err := get_marble(stub, id)
-	if err != nil{
-		fmt.Println("Failed to find marble by id " + id)
+	// get the customer
+	customer, err := get_customer(stub, id)
+	if err != nil {
+		fmt.Println("Failed to find customer by id " + id)
 		return shim.Error(err.Error())
 	}
 
 	// check authorizing company (see note in set_owner() about how this is quirky)
-	if marble.Owner.Company != authed_by_company{
-		return shim.Error("The company '" + authed_by_company + "' cannot authorize deletion for '" + marble.Owner.Company + "'.")
+	if customer.Owner.Company != authed_by_company {
+		return shim.Error("The company '" + authed_by_company + "' cannot authorize deletion for '" + customer.Owner.Company + "'.")
 	}
 
-	// remove the marble
-	err = stub.DelState(id)                                                 //remove the key from chaincode state
+	// remove the customer
+	err = stub.DelState(id) //remove the key from chaincode state
 	if err != nil {
 		return shim.Error("Failed to delete state")
 	}
 
-	fmt.Println("- end delete_marble")
+	fmt.Println("- end delete_customer")
 	return shim.Success(nil)
 }
 
@@ -123,9 +123,9 @@ func delete_marble(stub shim.ChaincodeStubInterface, args []string) (pb.Response
 //     id      ,  color, size,     owner id    ,  authing company
 // "m999999999", "blue", "35", "o9999999999999", "united marbles"
 // ============================================================================================================================
-func init_marble(stub shim.ChaincodeStubInterface, args []string) (pb.Response) {
+func init_customer(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
-	fmt.Println("starting init_marble")
+	fmt.Println("starting init_customer")
 
 	if len(args) != 5 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
@@ -154,36 +154,36 @@ func init_marble(stub shim.ChaincodeStubInterface, args []string) (pb.Response) 
 	}
 
 	//check authorizing company (see note in set_owner() about how this is quirky)
-	if owner.Company != authed_by_company{
+	if owner.Company != authed_by_company {
 		return shim.Error("The company '" + authed_by_company + "' cannot authorize creation for '" + owner.Company + "'.")
 	}
 
-	//check if marble id already exists
-	marble, err := get_marble(stub, id)
+	//check if customer id already exists
+	customer, err := get_customer(stub, id)
 	if err == nil {
-		fmt.Println("This marble already exists - " + id)
-		fmt.Println(marble)
-		return shim.Error("This marble already exists - " + id)  //all stop a marble by this id exists
+		fmt.Println("This customer already exists - " + id)
+		fmt.Println(customer)
+		return shim.Error("This customer already exists - " + id) //all stop a customer by this id exists
 	}
 
-	//build the marble json string manually
+	//build the customer json string manually
 	str := `{
-		"docType":"marble", 
+		"docType":"customer", 
 		"id": "` + id + `", 
-		"color": "` + color + `", 
-		"size": ` + strconv.Itoa(size) + `, 
+		"age": "` + age + `", 
+		//"size": ` + strconv.Itoa(size) + `, 
 		"owner": {
 			"id": "` + owner_id + `", 
 			"username": "` + owner.Username + `", 
 			"company": "` + owner.Company + `"
 		}
 	}`
-	err = stub.PutState(id, []byte(str))                         //store marble with id as key
+	err = stub.PutState(id, []byte(str)) //store customer with id as key
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	fmt.Println("- end init_marble")
+	fmt.Println("- end init_customer")
 	return shim.Success(nil)
 }
 
@@ -212,8 +212,8 @@ func init_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 
 	var owner Owner
-	owner.ObjectType = "marble_owner"
-	owner.Id =  args[0]
+	owner.ObjectType = "customer_owner"
+	owner.Id = args[0]
 	owner.Username = strings.ToLower(args[1])
 	owner.Company = args[2]
 	owner.Enabled = true
@@ -227,14 +227,14 @@ func init_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	}
 
 	//store user
-	ownerAsBytes, _ := json.Marshal(owner)                         //convert to array of bytes
-	err = stub.PutState(owner.Id, ownerAsBytes)                    //store owner by its Id
+	ownerAsBytes, _ := json.Marshal(owner)      //convert to array of bytes
+	err = stub.PutState(owner.Id, ownerAsBytes) //store owner by its Id
 	if err != nil {
 		fmt.Println("Could not store user")
 		return shim.Error(err.Error())
 	}
 
-	fmt.Println("- end init_owner marble")
+	fmt.Println("- end init_owner customer")
 	return shim.Success(nil)
 }
 
@@ -246,7 +246,7 @@ func init_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 // Inputs - Array of Strings
 //       0     ,        1      ,        2
 //  marble id  ,  to owner id  , company that auth the transfer
-// "m999999999", "o99999999999", united_mables" 
+// "m999999999", "o99999999999", united_mables"
 // ============================================================================================================================
 func set_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var err error
@@ -267,10 +267,10 @@ func set_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error(err.Error())
 	}
 
-	var marble_id = args[0]
+	var customer_id = args[0]
 	var new_owner_id = args[1]
 	var authed_by_company = args[2]
-	fmt.Println(marble_id + "->" + new_owner_id + " - |" + authed_by_company)
+	fmt.Println(customer_id + "->" + new_owner_id + " - |" + authed_by_company)
 
 	// check if user already exists
 	owner, err := get_owner(stub, new_owner_id)
@@ -278,25 +278,25 @@ func set_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 		return shim.Error("This owner does not exist - " + new_owner_id)
 	}
 
-	// get marble's current state
-	marbleAsBytes, err := stub.GetState(marble_id)
+	// get customer's current state
+	customerAsBytes, err := stub.GetState(customer_id)
 	if err != nil {
-		return shim.Error("Failed to get marble")
+		return shim.Error("Failed to get customer")
 	}
-	res := Marble{}
-	json.Unmarshal(marbleAsBytes, &res)           //un stringify it aka JSON.parse()
+	res := Customer{}
+	json.Unmarshal(customerAsBytes, &res) //un stringify it aka JSON.parse()
 
 	// check authorizing company
-	if res.Owner.Company != authed_by_company{
+	if res.Owner.Company != authed_by_company {
 		return shim.Error("The company '" + authed_by_company + "' cannot authorize transfers for '" + res.Owner.Company + "'.")
 	}
 
-	// transfer the marble
-	res.Owner.Id = new_owner_id                   //change the owner
+	// transfer the customer
+	res.Owner.Id = new_owner_id //change the owner
 	res.Owner.Username = owner.Username
 	res.Owner.Company = owner.Company
-	jsonAsBytes, _ := json.Marshal(res)           //convert to array of bytes
-	err = stub.PutState(args[0], jsonAsBytes)     //rewrite the marble with id as key
+	jsonAsBytes, _ := json.Marshal(res)       //convert to array of bytes
+	err = stub.PutState(args[0], jsonAsBytes) //rewrite the customer with id as key
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -311,7 +311,7 @@ func set_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 // Shows off PutState()
 //
 // Inputs - Array of Strings
-//       0     ,        1      
+//       0     ,        1
 //  owner id       , company that auth the transfer
 // "o9999999999999", "united_mables"
 // ============================================================================================================================
@@ -332,7 +332,7 @@ func disable_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 	var owner_id = args[0]
 	var authed_by_company = args[1]
 
-	// get the marble owner data
+	// get the customer owner data
 	owner, err := get_owner(stub, owner_id)
 	if err != nil {
 		return shim.Error("This owner does not exist - " + owner_id)
@@ -340,13 +340,13 @@ func disable_owner(stub shim.ChaincodeStubInterface, args []string) pb.Response 
 
 	// check authorizing company
 	if owner.Company != authed_by_company {
-		return shim.Error("The company '" + authed_by_company + "' cannot change another companies marble owner")
+		return shim.Error("The company '" + authed_by_company + "' cannot change another companies customer owner")
 	}
 
 	// disable the owner
 	owner.Enabled = false
-	jsonAsBytes, _ := json.Marshal(owner)         //convert to array of bytes
-	err = stub.PutState(args[0], jsonAsBytes)     //rewrite the owner
+	jsonAsBytes, _ := json.Marshal(owner)     //convert to array of bytes
+	err = stub.PutState(args[0], jsonAsBytes) //rewrite the owner
 	if err != nil {
 		return shim.Error(err.Error())
 	}

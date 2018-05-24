@@ -32,31 +32,31 @@ type SimpleChaincode struct {
 }
 
 // ============================================================================================================================
-// Asset Definitions - The ledger will store marbles and owners
+// Asset Definitions - The ledger will store customers and owners
 // ============================================================================================================================
 
-// ----- Marbles ----- //
-type Marble struct {
-	ObjectType string        `json:"docType"` //field for couchdb
-	Id       string          `json:"id"`      //the fieldtags are needed to keep case from bouncing around
-	Color      string        `json:"color"`
-	Size       int           `json:"size"`    //size in mm of marble
-	Owner      OwnerRelation `json:"owner"`
+// ----- customers ----- //
+type Customer struct {
+	ObjectType string `json:"docType"` //field for couchdb
+	Id         string `json:"id"`      //the fieldtags are needed to keep case from bouncing around
+	Age        int    `json:"color"`
+	//Size       int           `json:"size"`    //size in mm of customer
+	//Owner      OwnerRelation `json:"owner"`
 }
 
 // ----- Owners ----- //
 type Owner struct {
-	ObjectType string `json:"docType"`     //field for couchdb
+	ObjectType string `json:"docType"` //field for couchdb
 	Id         string `json:"id"`
 	Username   string `json:"username"`
 	Company    string `json:"company"`
-	Enabled    bool   `json:"enabled"`     //disabled owners will not be visible to the application
+	Enabled    bool   `json:"enabled"` //disabled owners will not be visible to the application
 }
 
 type OwnerRelation struct {
-	Id         string `json:"id"`
-	Username   string `json:"username"`    //this is mostly cosmetic/handy, the real relation is by Id not Username
-	Company    string `json:"company"`     //this is mostly cosmetic/handy, the real relation is by Id not Company
+	Id       string `json:"id"`
+	Username string `json:"username"` //this is mostly cosmetic/handy, the real relation is by Id not Username
+	Company  string `json:"company"`  //this is mostly cosmetic/handy, the real relation is by Id not Company
 }
 
 // ============================================================================================================================
@@ -69,11 +69,10 @@ func main() {
 	}
 }
 
-
 // ============================================================================================================================
-// Init - initialize the chaincode 
+// Init - initialize the chaincode
 //
-// Marbles does not require initialization, so let's run a simple test instead.
+// customers does not require initialization, so let's run a simple test instead.
 //
 // Shows off PutState() and how to pass an input argument to chaincode.
 // Shows off GetFunctionAndParameters() and GetStringArgs()
@@ -81,16 +80,16 @@ func main() {
 //
 // Inputs - Array of strings
 //  ["314"]
-// 
+//
 // Returns - shim.Success or error
 // ============================================================================================================================
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Println("Marbles Is Starting Up")
+	fmt.Println("customers Is Starting Up")
 	funcName, args := stub.GetFunctionAndParameters()
 	var number int
 	var err error
 	txId := stub.GetTxID()
-	
+
 	fmt.Println("Init() is running")
 	fmt.Println("Transaction ID:", txId)
 	fmt.Println("  GetFunctionAndParameters() function:", funcName)
@@ -117,7 +116,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 			// it's handy to read this right away to verify network is healthy if it wrote the correct value
 			err = stub.PutState("selftest", []byte(strconv.Itoa(number)))
 			if err != nil {
-				return shim.Error(err.Error())                  //self-test fail
+				return shim.Error(err.Error()) //self-test fail
 			}
 		}
 	}
@@ -127,16 +126,15 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("  GetStringArgs() args count:", len(alt))
 	fmt.Println("  GetStringArgs() args found:", alt)
 
-	// store compatible marbles application version
-	err = stub.PutState("marbles_ui", []byte("4.0.1"))
+	// store compatible customers application version
+	err = stub.PutState("customers_ui", []byte("4.0.1"))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	fmt.Println("Ready for action")                          //self-test pass
+	fmt.Println("Ready for action") //self-test pass
 	return shim.Success(nil)
 }
-
 
 // ============================================================================================================================
 // Invoke - Our entry point for Invocations
@@ -147,27 +145,27 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("starting invoke, for - " + function)
 
 	// Handle different functions
-	if function == "init" {                    //initialize the chaincode state, used as reset
+	if function == "init" { //initialize the chaincode state, used as reset
 		return t.Init(stub)
-	} else if function == "read" {             //generic read ledger
+	} else if function == "read" { //generic read ledger
 		return read(stub, args)
-	} else if function == "write" {            //generic writes to ledger
+	} else if function == "write" { //generic writes to ledger
 		return write(stub, args)
-	} else if function == "delete_marble" {    //deletes a marble from state
-		return delete_marble(stub, args)
-	} else if function == "init_marble" {      //create a new marble
-		return init_marble(stub, args)
-	} else if function == "set_owner" {        //change owner of a marble
+	} else if function == "delete_customer" { //deletes a customer from state
+		return delete_customer(stub, args)
+	} else if function == "init_customer" { //create a new customer
+		return init_customer(stub, args)
+	} else if function == "set_owner" { //change owner of a customer
 		return set_owner(stub, args)
-	} else if function == "init_owner"{        //create a new marble owner
+	} else if function == "init_owner" { //create a new customer owner
 		return init_owner(stub, args)
-	} else if function == "read_everything"{   //read everything, (owners + marbles + companies)
+	} else if function == "read_everything" { //read everything, (owners + customers + companies)
 		return read_everything(stub)
-	} else if function == "getHistory"{        //read history of a marble (audit)
+	} else if function == "getHistory" { //read history of a customer (audit)
 		return getHistory(stub, args)
-	} else if function == "getMarblesByRange"{ //read a bunch of marbles by start and stop id
-		return getMarblesByRange(stub, args)
-	} else if function == "disable_owner"{     //disable a marble owner from appearing on the UI
+	} else if function == "getCustomersByRange" { //read a bunch of customers by start and stop id
+		return getCustomersByRange(stub, args)
+	} else if function == "disable_owner" { //disable a customer owner from appearing on the UI
 		return disable_owner(stub, args)
 	}
 
@@ -175,7 +173,6 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fmt.Println("Received unknown invoke function name - " + function)
 	return shim.Error("Received unknown invoke function name - '" + function + "'")
 }
-
 
 // ============================================================================================================================
 // Query - legacy function
