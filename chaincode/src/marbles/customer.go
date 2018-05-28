@@ -39,7 +39,7 @@ type SimpleChaincode struct {
 type Customer struct {
 	ObjectType string `json:"docType"` //field for couchdb
 	Id         string `json:"id"`      //the fieldtags are needed to keep case from bouncing around
-	Age        int    `json:"color"`
+	Age        int    `json:"age"`
 	//Size       int           `json:"size"`    //size in mm of customer
 	//Owner      OwnerRelation `json:"owner"`
 }
